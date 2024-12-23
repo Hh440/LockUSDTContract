@@ -1,13 +1,16 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.13;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { console } from "forge-std/console.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+
 
 contract LockUSDT {
 
     address private usdtAddress;
-    mapping (address => uint256) pendingBalance;
+    mapping (address => uint256) public  pendingBalance;
 
-    constructor (address _usdtAddress){
+    constructor (address _usdtAddress) {
         usdtAddress=_usdtAddress;
 
 
@@ -15,10 +18,10 @@ contract LockUSDT {
 
     function deposit (uint256 _amount) public{
 
-        require(IERC20(usdtAddress).allowance(msg.sender,address(this))>=_amount);
+       require(IERC20(usdtAddress).allowance(msg.sender,address(this))>=_amount);
 
         IERC20(usdtAddress).transferFrom(msg.sender,address(this),_amount);
-
+       
         pendingBalance[msg.sender]+=_amount;
 
 
